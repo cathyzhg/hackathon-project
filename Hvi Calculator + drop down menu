@@ -27,18 +27,18 @@ const wP = 1.0; // Population weight
 const wB = 1.0; // Buildings weight
 const wR = 1.0; // Roads weight
 
+// pop = population density in sq miles
+// tree = tree coverage in %
+// buidlings = build coverage in %
+// roads = road coverage in %
+
+
 // City dataset
 const cityData = {
-  "New York": { tree: 15, pop: 100, buildings: 95, roads: 90 },
-  "Los Angeles": { tree: 25, pop: 85, buildings: 80, roads: 85 },
-  "Chicago": { tree: 22, pop: 75, buildings: 78, roads: 70 },
-  "Houston": { tree: 30, pop: 60, buildings: 65, roads: 60 },
-  "Seattle": { tree: 40, pop: 55, buildings: 60, roads: 55 },
-  "Boston": { tree: 28, pop: 70, buildings: 72, roads: 65 },
-  "San Francisco": { tree: 35, pop: 90, buildings: 85, roads: 80 },
-  "Miami": { tree: 38, pop: 65, buildings: 68, roads: 62 },
-  "Denver": { tree: 45, pop: 50, buildings: 55, roads: 50 },
-  "Atlanta": { tree: 42, pop: 60, buildings: 58, roads: 55 }
+  "Bellevue": { tree: 37, pop: 4538.2, buildings: 12, roads: 9 },
+  "Seattle": { tree: 28.6, pop: 8791, buildings: 28.1, roads: 27 },
+  "Renton": { tree: 29.3, pop: 4549.1, buildings: 12, roads: 30 },
+
 };
 
 // Populate dropdown
