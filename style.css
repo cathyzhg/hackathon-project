@@ -1,0 +1,17 @@
+body {
+  background: #000000;
+}
+p {
+  color: #7CFC00;
+}
+h1 {
+  font-weight: bold;
+  text-align: center;
+  color: #7CFC00;
+}
+
+a {
+  font-weight: bold;
+  margin: 0px 48px 0px 32px;
+  color: #7CFC00;
+}
