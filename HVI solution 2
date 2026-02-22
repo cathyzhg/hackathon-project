@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple HVI Calculator</title>
+  <style>
+    body { font-family: sans-serif; margin: 30px; line-height: 1.5; }
+    
+    /* Making the heading green */
+    h2 { color: #2e7d32; } 
+    
+    .data-display { background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 10px 0; }
+    #result { font-weight: bold; font-size: 1.2em; margin-top: 15px; color: #1b5e20; }
+  </style>
+</head>
+<body>
+
+<h2>King County Habitat Vitality Index</h2>
+
+<label>Select a city:</label><br>
+<select id="citySelector" onchange="updateUI()">
+  <option value="Seattle">Seattle</option>
+  <option value="Bellevue">Bellevue</option>
+  <option value="Renton">Renton</option>
+  <option value="Issaquah">Issaquah</option>
+  <option value="Mercer Island">Mercer Island</option>
+</select>
+
+<div class="data-display">
+  <strong>City Statistics:</strong>
+  <ul id="statsList">
+    </ul>
+</div>
+
+<div id="result"></div>
+
+<script>
+// The raw data
+const cityData = {
+  "Seattle":       {trees: 28, popD: 9538, buildings: 80, roads: 75},
+  "Bellevue":      {trees: 40, popD: 4651, buildings: 60, roads: 60},
+  "Renton":        {trees: 35, popD: 4458, buildings: 63, roads: 60},
+  "Issaquah":      {trees: 39, popD: 3200, buildings: 54, roads: 53},
+  "Mercer Island": {trees: 48, popD: 4000, buildings: 50, roads: 45}
+};
+
+function updateUI() {
+  const name = document.getElementById("citySelector").value;
+  const data = cityData[name];
+
+  // 1. Show the variables clearly
+  document.getElementById("statsList").innerHTML = `
+    <li>Tree Canopy Coverage (%): ${data.trees}%</li>
+    <li>Population Density (Sq Miles): ${data.popD}</li>
+    <li>Land Covered by Buildings (%): ${data.buildings}%</li>
+    <li>Land Covered by Roads (%): ${data.roads}%</li>
+  `;
+
+  // 2. Simple Calculation 
+  // We take trees and subtract a small portion of the urban "clutter"
+  const score = data.trees - (data.buildings * 0.1) - (data.roads * 0.1);
+  
+  // 3. Simple Habitat Logic
+  let habitat = "Urban Adapters (Squirrels)";
+  if (score > 35) habitat = "Forest Dwellers (Deer, Owls)";
+  if (score < 20) habitat = "Pave-dwellers (Pigeons)";
+
+  document.getElementById("result").innerHTML = `Vitality Score: ${score.toFixed(1)} <br> Habitat Type: ${habitat}`;
+}
+
+// Run once on startup
+updateUI();
+</script>
+
+</body>
+</html>
