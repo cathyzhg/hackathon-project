@@ -8,9 +8,11 @@ p {
 }
 
 .p2 {
-  text-align: center;
+  text-align: left;
   color: #11ff00;
   font-size: 20px;
+  width: 75%;
+  margin: 0 auto;
 }
 
 h1 {
@@ -53,8 +55,8 @@ img {
   width: 250px;
 }
 .sizeup {
-  width: 500px;
-  height: 300px;
+  width: 600px;
+  height: 360px;
   display: block;
   margin: 0 auto;
 }
@@ -149,4 +151,10 @@ ul {
 
 .centerall {
   text-align: center;    
+}
+
+.p2-center {
+  text-align: center;
+  color: #11ff00;
+  font-size: 20px;
 }
