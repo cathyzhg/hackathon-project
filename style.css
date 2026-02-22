@@ -52,6 +52,12 @@ img {
   height: 100px;
   width: 250px;
 }
+.sizeup {
+  width: 500px;
+  height: 300px;
+  display: block;
+  margin: 0 auto;
+}
 
 .banner {
   background-image: url("Banner.png");
@@ -125,4 +131,22 @@ select, button {
 
 strong {
   color: #11ff00;
+}
+
+ul {
+  color: #11ff00;
+  font-size: 20px;
+  list-style-position: inside;
+}
+
+.aligning {
+  width: fit-content;
+  margin: 0 auto;      
+  text-align: left; 
+  color: #11ff00;
+  font-size: 20px;
+}
+
+.centerall {
+  text-align: center;    
 }
