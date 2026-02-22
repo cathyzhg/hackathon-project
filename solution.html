@@ -2,23 +2,57 @@
 <html>
   <head>
     <link rel="stylesheet" href="style.css">
+    <style>
+    select, button { 
+      font-size: 18px; 
+      margin: 10px auto; 
+      padding: 8px 15px; 
+      font-family: monospace;
+      background-color: #5a7a57;
+      color: #242D11;
+      border: 2px solid #333333;
+      cursor: pointer;
+      display: block;
+      width: 300px;
+    }
+    button:hover {
+      background-color: #3d523b;
+      color: #242D11;
+    }
+    #result { 
+      margin-top: 20px; 
+      font-weight: bold; 
+      color: #242D11;
+      text-align: center;
+      font-size: 24px;
+      line-height: 1.6;
+    }
+    #statsList .p2 {
+      font-size: 21px;
+      color: #242D11;
+    }
+    .p2-large {
+      text-align: center;
+      color: #242D11;
+      font-size: 28px;
+    }
+    </style>
   </head>
+  
   <body>
-
 
     <span class = "block-span">
       <br>
       <a href="index.html"> Home</a>  <a href="aboutus.html"> About Us</a> <a href="problems.html"> The Problem</a> <a href="solution.html"> The Solution</a>
     </span>
-    <br>
     
+    <br>
     <h1> The Solution </h1>
     <hr>
+    <p class="p2-large"> Habitat Vitality Index (HVI) Calculator </p>
 
-
-    <h2>King County Habitat Vitality Index</h2>
-
-    <label>Select a city:</label><br>
+    <br>
+    <p class="p2-large">Select a city:</p>
     <select id="citySelector" onchange="updateUI()">
       <option value="Seattle">Seattle</option>
       <option value="Bellevue">Bellevue</option>
@@ -27,15 +61,14 @@
       <option value="Mercer Island">Mercer Island</option>
     </select>
 
-    <div class="data-display">
-      <strong>City Statistics:</strong>
-      <ul id="statsList">
-        </ul>
-    </div>
+    <br>
+    <div id="statsList"></div>
 
+    <br>
     <div id="result"></div>
 
     <script>
+    // The raw data
     const cityData = {
       "Seattle":       {trees: 28, popD: 9538, buildings: 80, roads: 75},
       "Bellevue":      {trees: 40, popD: 4651, buildings: 60, roads: 60},
@@ -48,42 +81,29 @@
       const name = document.getElementById("citySelector").value;
       const data = cityData[name];
 
-      // 1. Show the variables clearly
+      // Display city statistics
       document.getElementById("statsList").innerHTML = `
-        <li>Tree Canopy Coverage (%): ${data.trees}%</li>
-        <li>Population Density (Sq Miles): ${data.popD}</li>
-        <li>Land Covered by Buildings (%): ${data.buildings}%</li>
-        <li>Land Covered by Roads (%): ${data.roads}%</li>
+        <p class="p2">
+          Tree Canopy: ${data.trees}% | Population Density: ${data.popD}/sq mi | Buildings: ${data.buildings}% | Roads: ${data.roads}%
+        </p>
       `;
 
-      // 2. Simple Calculation 
-      // We take trees and subtract a small portion of the urban "clutter"
+      // Calculate vitality score
       const score = data.trees - (data.buildings * 0.1) - (data.roads * 0.1);
       
-      // 3. Simple Habitat Logic
-      let habitat = "Urban Adapters (Squirrels)";
-      if (score > 35) habitat = "Forest Dwellers (Deer, Owls)";
-      if (score < 20) habitat = "Pave-dwellers (Pigeons)";
-
-      let statusClass = "medium";
-
-      if (score > 35) statusClass = "good";
-      if (score < 20) statusClass = "bad";
+      // Determine habitat type
+      let habitat = "Urban Adapters (Squirrels, Hawks)";
+      if (score > 35) habitat = "Forest Dwellers (Deer, Owls, Bears)";
+      if (score < 20) habitat = "Pavement Dwellers (Pigeons, Rats)";
 
       document.getElementById("result").innerHTML = `
-        <div class="${statusClass}">
-          Vitality Score: ${score.toFixed(1)} <br>
-          Habitat Type: ${habitat}
-        </div>
-      `;
+        <strong>Vitality Score: ${score.toFixed(1)}</strong><br>
+        <strong>Habitat Type: ${habitat}</strong>`;
     }
 
-    // Run once on startup
+    // Initialize on page load
     updateUI();
     </script>
-    <h2> How Our Project Helps </h2>
-    <hr>
-    <p> Our project helps people clearly see how urban growth affects wildlife over time. By turning data into simple graphs and a website, we make the issue easier to understand. When people can see the changes visually, they are more likely to <br> care and take action. We hope our work encourages smarter planning that protects wildlife while cities continue to grow. </p>
 
   </body>
 </html>
