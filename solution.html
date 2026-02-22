@@ -2,6 +2,41 @@
 <html>
   <head>
     <link rel="stylesheet" href="style.css">
+    <style>
+    select, button { 
+      font-size: 18px; 
+      margin: 10px auto; 
+      padding: 8px 15px; 
+      font-family: monospace;
+      background-color: #5a7a57;
+      color: #11ff00;
+      border: 2px solid #333333;
+      cursor: pointer;
+      display: block;
+      width: 300px;
+    }
+    button:hover {
+      background-color: #3d523b;
+      color: #11ff00;
+    }
+    #result { 
+      margin-top: 20px; 
+      font-weight: bold; 
+      color: #11ff00;
+      text-align: center;
+      font-size: 24px;
+      line-height: 1.6;
+    }
+    #statsList .p2 {
+      font-size: 21px;
+      color: #11ff00;
+    }
+    .p2-large {
+      text-align: center;
+      color: #11ff00;
+      font-size: 28px;
+    }
+    </style>
   </head>
   
   <body>
@@ -16,17 +51,18 @@
     <hr>
     <p class="p2-large"> Habitat Vitality Index (HVI) Calculator </p>
 
-    <br>
-    <p class="p2-large">Select a city:</p>
-    <select id="citySelector" onchange="updateUI()">
-      <option value="Seattle">Seattle</option>
-      <option value="Bellevue">Bellevue</option>
-      <option value="Renton">Renton</option>
-      <option value="Issaquah">Issaquah</option>
-      <option value="Mercer Island">Mercer Island</option>
-    </select>
+    <div style="text-align: center;">
+      <span class="p2-large" style="display: inline-block; margin-right: 15px; background-color: transparent;">Select a city:</span>
+      <select id="citySelector" onchange="updateUI()" style="display: inline-block;">
+        <option value="Seattle">Seattle</option>
+        <option value="Bellevue">Bellevue</option>
+        <option value="Renton">Renton</option>
+        <option value="Issaquah">Issaquah</option>
+        <option value="Mercer Island">Mercer Island</option>
+        <option value="Newcastle">Newcastle</option>
+      </select>
+    </div>
 
-    <br>
     <div id="statsList"></div>
 
     <br>
@@ -39,7 +75,8 @@
       "Bellevue":      {trees: 40, popD: 4651, buildings: 60, roads: 60},
       "Renton":        {trees: 35, popD: 4458, buildings: 63, roads: 60},
       "Issaquah":      {trees: 39, popD: 3200, buildings: 54, roads: 53},
-      "Mercer Island": {trees: 48, popD: 4000, buildings: 50, roads: 45}
+      "Mercer Island": {trees: 48, popD: 4000, buildings: 50, roads: 45},
+      "Newcastle":     {trees: 47, popD: 2926, buildings: 3, roads: 2}
     };
 
     function updateUI() {
@@ -58,12 +95,28 @@
       
       // Determine habitat type
       let habitat = "Urban Adapters (Squirrels, Hawks)";
-      if (score > 35) habitat = "Forest Dwellers (Deer, Owls, Bears)";
-      if (score < 20) habitat = "Pavement Dwellers (Pigeons, Rats)";
+      let imageHTML = "";
+      
+      if (score > 45) {
+        habitat = "Forest Dwellers (Deer, Bears)";
+        imageHTML = '<br><img src="bear.png" alt="Bear" style="width: 40%; height: auto; display: block; margin: 20px auto;">';
+      }
+      else if (score > 35) {
+        habitat = "Forest Dwellers (Foxes, Owls)";
+        imageHTML = '<br><img src="foxowl.png" alt="Nature" style="width: 40%; height: auto; display: block; margin: 20px auto;">';
+      }
+      else if (score >= 20) {
+        habitat = "Urban Adapters (Squirrels, Hawks)";
+        imageHTML = '<br><img src="chipmunk bird.png" alt="Nature" style="width: 40%; height: auto; display: block; margin: 20px auto;">';
+      }
+      else {
+        habitat = "Pavement Dwellers (Pigeons, Rats)";
+        imageHTML = '<br><img src="pigion.png" alt="Banner" style="width: 40%; height: auto; display: block; margin: 20px auto;">';
+      }
 
       document.getElementById("result").innerHTML = `
         <strong>Vitality Score: ${score.toFixed(1)}</strong><br>
-        <strong>Habitat Type: ${habitat}</strong>`;
+        <strong>Habitat Type: ${habitat}</strong>${imageHTML}`;
     }
 
     // Initialize on page load
