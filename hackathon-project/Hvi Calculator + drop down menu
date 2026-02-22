@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>King County HVI Calculator</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  color: green;
+}
+select, button {
+  font-size: 16px; padding: 6px; margin: 10px 0;
+}
+#result { margin-top: 20px; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<h2>King County Habitat Vitality Index</h2>
+
+<label for="city">Select a city:</label>
+<select id="city"></select>
+<button onclick="calculateHVI()">Calculate HVI</button>
+
+<div id="result"></div>
+
+<script>
+// Cities with estimates (tree % & population density per sq mi)
+const cityData = {
+  "Seattle":         {trees:28,  popD:9538,  buildings:80, roads:75},
+  "Bellevue":        {trees:40,  popD:4651,  buildings:60, roads:60},
+  "Renton":          {trees:35,  popD:4458,  buildings:63, roads:60},
+  "Issaquah":        {trees:39,  popD:3200,  buildings:54, roads:53},
+  "Mercer Island":   {trees: 48, popD: 4000, buildings:50,roads: 45},
+
+};
+
+// Populate dropdown
+const select = document.getElementById("city");
+Object.keys(cityData).forEach(c => {
+  let opt = document.createElement("option");
+  opt.value = c; opt.text = c;
+  select.appendChild(opt);
+});
+
+// Find min & max for normalization
+function getMinMax(metric) {
+  const vals = Object.values(cityData).map(c => c[metric]);
+  return { min: Math.min(...vals), max: Math.max(...vals) };
+}
+
+// Normalize
+function norm(x, mm) {
+  return (x - mm.min) / (mm.max - mm.min);
+}
+
+function calculateHVI() {
+  const city = select.value;
+  const d = cityData[city];
+
+  const mmTree = getMinMax("trees");
+  const mmPop  = getMinMax("popD");
+  const mmBld  = getMinMax("buildings");
+  const mmRd   = getMinMax("roads");
+
+  const nTree = norm(d.trees, mmTree);
+  const nPop  = norm(d.popD, mmPop);
+  const nBld  = norm(d.buildings, mmBld);
+  const nRd   = norm(d.roads, mmRd);
+
+  // Equal weights example
+  const wT=1, wP=1, wB=1, wR=1;
+  const HVI = 100 * (
+      wT*nTree +
+      wP*(1-nPop) +
+      wB*(1-nBld) +
+      wR*(1-nRd)
+    ) / (wT+wP+wB+wR);
+
+  let hab;
+  if (HVI>=80) hab="All animals thriving (Bears, Deer)";
+  else if (HVI>=50) hab="Medium mammals (Foxes, Owls)";
+  else if (HVI>=20) hab="Urban adapters (Squirrels, Hawks)";
+  else hab="Only survivors (Pigeons, Rats)";
+
+  document.getElementById("result").innerHTML =
+    `City: ${city}<br>
+     HVI Score: ${HVI.toFixed(1)}<br>
+     Habitat: ${hab}`;
+}
+</script>
+
+</body>
+</html>
