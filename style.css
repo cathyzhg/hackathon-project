@@ -25,7 +25,7 @@ h1 {
 
 a {
   font-weight: bold;
-  margin: 21px 100px 21px 50px;
+  margin: 21px 120px 21px 100px;
   color: #11ff00;
   font-size: 20px;
 }
@@ -43,7 +43,57 @@ span {
 
 span.block-span {
   display: block;
-  width: 1160px; 
+  width: 1420px; 
   height: 50px; 
 }
 
+
+img {
+  height: 100px;
+  width: 250px;
+}
+
+.banner {
+  background-image: url("nature.png");
+  background-size: cover;
+  background-position: center;
+  padding: 40px;
+  width: 1340px;
+  height: 150px;
+  color: white;
+}
+
+label {
+  text-align: center;
+  color: #11ff00;
+  font-size: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #11ff00;
+  font-size: 20px;
+}
+.data-display { 
+  background: #57b236; 
+  padding: 15px; 
+  border-radius: 5px; 
+  margin: 10px 0; 
+  width: 700px;
+  height: 100px;
+}
+
+.good {
+  color: #00ff00;   /* green */
+  font-weight: bold;
+}
+
+.medium {
+  color: #ffff00;   /* yellow */
+  font-weight: bold;
+}
+
+.bad {
+  color: #ff2b2b;   /* red */
+  font-weight: bold;
+}
