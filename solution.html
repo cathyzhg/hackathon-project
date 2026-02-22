@@ -4,12 +4,120 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    
-    <br>
-    <a href="index.html"> Home</a>  <a href="aboutus.html"> About Us </a> <a href="problems.html"> The Problem </a> <a href="solution.html"> The Solution </a>
+    <span class = "block-span">
+      <br>
+      <a href="index.html"> Home</a>  <a href="aboutus.html"> About Us</a> <a href="problems.html"> The Problem</a> <a href="solution.html"> The Solution</a>
+    </span>
     <br>
     
     <h1> The Solution </h1>
-    
+    <hr>
+
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Habitat Vitality Index Calculator</title>
+    <style>
+    body {padding: 20px; }
+    select, button { font-size: 16px; margin: 10px 0; padding: 5px; }
+    #result { margin-top: 20px; font-weight: bold; }
+    </style>
+    </head>
+    <body>
+
+    <h2>Habitat Vitality Index (HVI) Calculator</h2>
+
+    <label>Select a city:</label>
+    <select id="citySelect"></select>
+
+    <button onclick="calculateHVI()">Calculate HVI</button>
+
+    <div id="result"></div>
+
+    <script>
+    // Weights (you can change these)
+    const wT = 1.0; // Trees weight
+    const wP = 1.0; // Population weight
+    const wB = 1.0; // Buildings weight
+    const wR = 1.0; // Roads weight
+
+    // pop = population density in sq miles
+    // tree = tree coverage in %
+    // buidlings = build coverage in %
+    // roads = road coverage in %
+
+
+    // City dataset
+    const cityData = {
+    "Bellevue": { tree: 37, pop: 4538.2, buildings: 12, roads: 9 },
+    "Seattle": { tree: 28.6, pop: 8791, buildings: 28.1, roads: 27 },
+    "Renton": { tree: 29.3, pop: 4549.1, buildings: 12, roads: 30 },
+
+    };
+
+    // Populate dropdown
+    const select = document.getElementById("citySelect");
+    Object.keys(cityData).forEach(city => {
+    let option = document.createElement("option");
+    option.value = city;
+    option.text = city;
+    select.appendChild(option);
+    });
+
+    // Function to get min and max of a metric
+    function getMinMax(metric) {
+    const values = Object.values(cityData).map(city => city[metric]);
+    return {
+      min: Math.min(...values),
+      max: Math.max(...values)
+    };
+    }
+
+    // Normalize function
+    function normalize(value, min, max) {
+    return (value - min) / (max - min);
+    }
+
+    // Calculate HVI
+    function calculateHVI() {
+
+    const city = select.value;
+    const data = cityData[city];
+
+    // Get min/max for each metric
+    const treeMM = getMinMax("tree");
+    const popMM = getMinMax("pop");
+    const buildMM = getMinMax("buildings");
+    const roadMM = getMinMax("roads");
+
+    // Normalize values
+    const normTree = normalize(data.tree, treeMM.min, treeMM.max);
+    const normPop = normalize(data.pop, popMM.min, popMM.max);
+    const normBuild = normalize(data.buildings, buildMM.min, buildMM.max);
+    const normRoad = normalize(data.roads, roadMM.min, roadMM.max);
+
+    // Apply HVI formula
+    const HVI = 100 * (
+      (wT * normTree) +
+      (wP * (1 - normPop)) +
+      (wB * (1 - normBuild)) +
+      (wR * (1 - normRoad))
+    ) / (wT + wP + wB + wR);
+
+    // Determine habitat level
+    let animals;
+    if (HVI >= 80) animals = "All animals thriving (Bears, Deer)";
+    else if (HVI >= 50) animals = "Medium mammals (Foxes, Owls)";
+    else if (HVI >= 20) animals = "Urban adapters (Squirrels, Hawks)";
+    else animals = "Only survivors (Pigeons, Rats)";
+
+    document.getElementById("result").innerHTML =
+      `City: ${city}<br>
+        HVI Score: ${HVI.toFixed(2)}<br>
+        Habitat: ${animals}`;
+    }
+
+    </script>
+
   </body>
 </html>
