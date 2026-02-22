@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+
+
     <span class = "block-span">
       <br>
       <a href="index.html"> Home</a>  <a href="aboutus.html"> About Us</a> <a href="problems.html"> The Problem</a> <a href="solution.html"> The Solution</a>
@@ -13,111 +15,75 @@
     <h1> The Solution </h1>
     <hr>
 
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <title>Habitat Vitality Index Calculator</title>
-    <style>
-    body {padding: 20px; }
-    select, button { font-size: 16px; margin: 10px 0; padding: 5px; }
-    #result { margin-top: 20px; font-weight: bold; }
-    </style>
-    </head>
-    <body>
 
-    <h2>Habitat Vitality Index (HVI) Calculator</h2>
+    <h2>King County Habitat Vitality Index</h2>
 
-    <label>Select a city:</label>
-    <select id="citySelect"></select>
+    <label>Select a city:</label><br>
+    <select id="citySelector" onchange="updateUI()">
+      <option value="Seattle">Seattle</option>
+      <option value="Bellevue">Bellevue</option>
+      <option value="Renton">Renton</option>
+      <option value="Issaquah">Issaquah</option>
+      <option value="Mercer Island">Mercer Island</option>
+    </select>
 
-    <button onclick="calculateHVI()">Calculate HVI</button>
+    <div class="data-display">
+      <strong>City Statistics:</strong>
+      <ul id="statsList">
+        </ul>
+    </div>
 
     <div id="result"></div>
 
     <script>
-    // Weights (you can change these)
-    const wT = 1.0; // Trees weight
-    const wP = 1.0; // Population weight
-    const wB = 1.0; // Buildings weight
-    const wR = 1.0; // Roads weight
-
-    // pop = population density in sq miles
-    // tree = tree coverage in %
-    // buidlings = build coverage in %
-    // roads = road coverage in %
-
-
-    // City dataset
     const cityData = {
-    "Bellevue": { tree: 37, pop: 4538.2, buildings: 12, roads: 9 },
-    "Seattle": { tree: 28.6, pop: 8791, buildings: 28.1, roads: 27 },
-    "Renton": { tree: 29.3, pop: 4549.1, buildings: 12, roads: 30 },
-
+      "Seattle":       {trees: 28, popD: 9538, buildings: 80, roads: 75},
+      "Bellevue":      {trees: 40, popD: 4651, buildings: 60, roads: 60},
+      "Renton":        {trees: 35, popD: 4458, buildings: 63, roads: 60},
+      "Issaquah":      {trees: 39, popD: 3200, buildings: 54, roads: 53},
+      "Mercer Island": {trees: 48, popD: 4000, buildings: 50, roads: 45}
     };
 
-    // Populate dropdown
-    const select = document.getElementById("citySelect");
-    Object.keys(cityData).forEach(city => {
-    let option = document.createElement("option");
-    option.value = city;
-    option.text = city;
-    select.appendChild(option);
-    });
+    function updateUI() {
+      const name = document.getElementById("citySelector").value;
+      const data = cityData[name];
 
-    // Function to get min and max of a metric
-    function getMinMax(metric) {
-    const values = Object.values(cityData).map(city => city[metric]);
-    return {
-      min: Math.min(...values),
-      max: Math.max(...values)
-    };
+      // 1. Show the variables clearly
+      document.getElementById("statsList").innerHTML = `
+        <li>Tree Canopy Coverage (%): ${data.trees}%</li>
+        <li>Population Density (Sq Miles): ${data.popD}</li>
+        <li>Land Covered by Buildings (%): ${data.buildings}%</li>
+        <li>Land Covered by Roads (%): ${data.roads}%</li>
+      `;
+
+      // 2. Simple Calculation 
+      // We take trees and subtract a small portion of the urban "clutter"
+      const score = data.trees - (data.buildings * 0.1) - (data.roads * 0.1);
+      
+      // 3. Simple Habitat Logic
+      let habitat = "Urban Adapters (Squirrels)";
+      if (score > 35) habitat = "Forest Dwellers (Deer, Owls)";
+      if (score < 20) habitat = "Pave-dwellers (Pigeons)";
+
+      let statusClass = "medium";
+
+      if (score > 35) statusClass = "good";
+      if (score < 20) statusClass = "bad";
+
+      document.getElementById("result").innerHTML = `
+        <div class="${statusClass}">
+          Vitality Score: ${score.toFixed(1)} <br>
+          Habitat Type: ${habitat}
+        </div>
+      `;
     }
 
-    // Normalize function
-    function normalize(value, min, max) {
-    return (value - min) / (max - min);
-    }
-
-    // Calculate HVI
-    function calculateHVI() {
-
-    const city = select.value;
-    const data = cityData[city];
-
-    // Get min/max for each metric
-    const treeMM = getMinMax("tree");
-    const popMM = getMinMax("pop");
-    const buildMM = getMinMax("buildings");
-    const roadMM = getMinMax("roads");
-
-    // Normalize values
-    const normTree = normalize(data.tree, treeMM.min, treeMM.max);
-    const normPop = normalize(data.pop, popMM.min, popMM.max);
-    const normBuild = normalize(data.buildings, buildMM.min, buildMM.max);
-    const normRoad = normalize(data.roads, roadMM.min, roadMM.max);
-
-    // Apply HVI formula
-    const HVI = 100 * (
-      (wT * normTree) +
-      (wP * (1 - normPop)) +
-      (wB * (1 - normBuild)) +
-      (wR * (1 - normRoad))
-    ) / (wT + wP + wB + wR);
-
-    // Determine habitat level
-    let animals;
-    if (HVI >= 80) animals = "All animals thriving (Bears, Deer)";
-    else if (HVI >= 50) animals = "Medium mammals (Foxes, Owls)";
-    else if (HVI >= 20) animals = "Urban adapters (Squirrels, Hawks)";
-    else animals = "Only survivors (Pigeons, Rats)";
-
-    document.getElementById("result").innerHTML =
-      `City: ${city}<br>
-        HVI Score: ${HVI.toFixed(2)}<br>
-        Habitat: ${animals}`;
-    }
-
+    // Run once on startup
+    updateUI();
     </script>
+    <h2> How Our Project Helps </h2>
+    <hr>
+    <p> Our project helps people clearly see how urban growth affects wildlife over time. By turning data into simple graphs and a website, we make the issue easier to understand. When people can see the changes visually, they are more likely to <br> care and take action. We hope our work encourages smarter planning that protects wildlife while cities continue to grow. </p>
 
   </body>
 </html>
