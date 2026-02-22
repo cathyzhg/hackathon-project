@@ -1,5 +1,5 @@
 body {
-  background: #5a7a57;
+  background: #0b3c02;
   font-family: monospace;
 }
 
@@ -25,7 +25,7 @@ h1 {
 
 a {
   font-weight: bold;
-  margin: 21px 100px 21px 50px;
+  margin: 21px 120px 21px 100px;
   color: #11ff00;
   font-size: 20px;
 }
@@ -38,19 +38,91 @@ hr {
   margin: 10px auto;     /* this centers it */
 }
 span {
-  background-color: #2e3d2c;
+  background-color: #0b5f00;
 }
 
 span.block-span {
   display: block;
-  width: 100%; 
+  width: 1420px; 
   height: 50px; 
 }
 
 
+img {
+  height: 100px;
+  width: 250px;
+}
+
 .banner {
-  width: 60%;
-  height: auto;
+  background-image: url("Banner.png");
+  background-size: cover;
+  background-position: center;
+  padding: 40px;
+  width: 1340px;
+  height: 150px;
+  color: white;
+}
+
+label {
+  text-align: center;
+  color: #11ff00;
+  font-size: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #11ff00;
+  font-size: 20px;
+}
+.data-display { 
+  background: #57b236; 
+  padding: 15px; 
+  border-radius: 5px; 
+  margin: 10px 0; 
+  width: 700px;
+  height: 100px;
+}
+
+.good {
+  color: #00ff00;   /* green */
+  font-weight: bold;
+}
+
+.medium {
+  color: #ffff00;   /* yellow */
+  font-weight: bold;
+}
+
+.bad {
+  color: #ff2b2b;   /* red */
+  font-weight: bold;
+}
+
+select, button { 
+  font-size: 18px; 
+  margin: 10px auto; 
+  padding: 8px 15px; 
+  font-family: monospace;
+  border: 2px solid #333333;
+  cursor: pointer;
   display: block;
-  margin: 0 auto;
+  width: 300px;
+}
+#result { 
+  margin-top: 20px; 
+  font-weight: bold; 
+  text-align: center;
+  font-size: 24px;
+  line-height: 1.6;
+}
+#statsList .p2 {
+  font-size: 21px;
+}
+.p2-large {
+  text-align: center;
+  font-size: 28px;
+}
+
+strong {
+  color: #11ff00;
 }
