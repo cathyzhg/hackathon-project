@@ -1,0 +1,53 @@
+<br>
+    <p class="p2-large">Select a city:</p>
+    <select id="citySelector" onchange="updateUI()">
+      <option value="Seattle">Seattle</option>
+      <option value="Bellevue">Bellevue</option>
+      <option value="Renton">Renton</option>
+      <option value="Issaquah">Issaquah</option>
+      <option value="Mercer Island">Mercer Island</option>
+    </select>
+
+    <br>
+    <div id="statsList"></div>
+
+    <br>
+    <div id="result"></div>
+
+    <script>
+    // The raw data
+    const cityData = {
+      "Seattle":       {trees: 28, popD: 9538, buildings: 80, roads: 75},
+      "Bellevue":      {trees: 40, popD: 4651, buildings: 60, roads: 60},
+      "Renton":        {trees: 35, popD: 4458, buildings: 63, roads: 60},
+      "Issaquah":      {trees: 39, popD: 3200, buildings: 54, roads: 53},
+      "Mercer Island": {trees: 48, popD: 4000, buildings: 50, roads: 45}
+    };
+
+    function updateUI() {
+      const name = document.getElementById("citySelector").value;
+      const data = cityData[name];
+
+      // Display city statistics
+      document.getElementById("statsList").innerHTML = `
+        <p class="p2">
+          Tree Canopy: ${data.trees}% | Population Density: ${data.popD}/sq mi | Buildings: ${data.buildings}% | Roads: ${data.roads}%
+        </p>
+      `;
+
+      // Calculate vitality score
+      const score = data.trees - (data.buildings * 0.1) - (data.roads * 0.1);
+      
+      // Determine habitat type
+      let habitat = "Urban Adapters (Squirrels, Hawks)";
+      if (score > 35) habitat = "Forest Dwellers (Deer, Owls, Bears)";
+      if (score < 20) habitat = "Pavement Dwellers (Pigeons, Rats)";
+
+      document.getElementById("result").innerHTML = `
+        <strong>Vitality Score: ${score.toFixed(1)}</strong><br>
+        <strong>Habitat Type: ${habitat}</strong>`;
+    }
+
+    // Initialize on page load
+    updateUI();
+    </script>
